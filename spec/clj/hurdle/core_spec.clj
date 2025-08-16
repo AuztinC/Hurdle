@@ -1,7 +1,7 @@
 (ns hurdle.core-spec
   (:require [speclj.core :refer :all]
-            [hurdle.core :refer :all]))
+            [hurdle.core :as sut]))
 
-(describe "a test"
-  (it "FIXME, I fail."
-    (should= 1 1)))
+(describe "Main clj "
+  (it "gets response from gemini"
+    (should= -1 (sut/-main))))

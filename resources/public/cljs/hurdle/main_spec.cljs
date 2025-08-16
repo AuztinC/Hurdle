@@ -3,12 +3,7 @@
                                         it
                                         describe
                                         before
-                                        redefs-around
-                                        with-stubs
-                                        stub
-                                        context
-                                        should-have-invoked
-                                        focus-describe]]
+                                        with-stubs]]
                    [c3kit.wire.spec-helperc :refer [should-select]])
   (:require [speclj.core]
             [c3kit.wire.spec-helper :as wire]
@@ -20,7 +15,6 @@
   (before (wire/render [sut/app]))
 
   (it "game container"
-    (should-select "#main-container")
-    #_(should= "Welcome to Tic-Tac-Toe!" (wire/text "#title")))
+    (should-select "#main-container"))
   )
 
