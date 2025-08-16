@@ -1,0 +1,23 @@
+* {
+  font-family: system-ui;
+}
+
+button {
+  padding: 32px;
+}
+
+h2, h1 {
+  text-align: center;
+}
+
+body, #main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board-3x3x3:nth-child(3n) {
+    border: solid black 3px;
+}
+
