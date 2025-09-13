@@ -1,5 +1,6 @@
 * {
-  font-family: system-ui;
+  font-family: calibri;
+  box-sizing: border-box;
 }
 
 button {
@@ -10,16 +11,81 @@ h2, h1 {
   text-align: center;
 }
 
-body, #main-container {
+body {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    height: 100vh;
+    background-color: gray;
+}
+
+#main-container {
+    background: linear-gradient(#e66465, #9198e5);
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+    box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 0.3);
+
+
+}
+
+@keyframes shadow {
+    animation-name: shadow;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate-reverse;
+  from { box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 0.3);}
+  to { box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);}
+}
+
+.word-row {
+    padding: 5px;
+    display: flex;
+    justify-content: space-around;
 }
 
 .cell {
+    border-radius: 3px;
+    margin-left: 2px;
+    margin-right: 2px;
     background-color: rgb(1, 1, 97);
     width: 50px;
     height: 50px
+}
+
+@keyframes selected {
+  from {box-shadow: 0px 0px 0px 2px rgba(255,255,255,1);}
+  to {box-shadow: 0px 0px 0px 2px rgba(255,255,255,0.3);}
+}
+
+.selected {
+    box-shadow: 0px 0px 0px 2px rgba(255,255,255,1);
+    animation-name: selected;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.row {
+margin-top: 3px;
+    display:flex;
+    justify-content: space-around;
+}
+
+#row-2 {
+    margin-bottom: 5px;
+}
+
+.letter {
+    cursor: pointer;
+    text-align:center;
+    width :25px;
+    height 28px;
+    background-color: gray;
+    border: 1px solid black;
+    border-radius: 2px;
+    padding: 3px;
 }
 
