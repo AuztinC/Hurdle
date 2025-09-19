@@ -1,91 +1,188 @@
-* {
-  font-family: calibri;
+/* ===== Base / Theme Tokens ===== */
+:root {
+  --radius-xs: .25rem;
+  --radius-sm: .375rem;
+  --radius-md: .5rem;
+
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+
+  --cell-w: 4.4rem;
+  --cell-h: 4.8rem;
+
+  --shadow-1: 0 0 .2rem rgba(255, 100, 0, .6);
+  --shadow-2: 0 0 .6rem rgba(0, 0, 0, .4);
+  --shadow-3: 0 0 1rem rgba(0, 0, 0, .3);
+
+  --bg-body: #808080;
+  --bg-card: linear-gradient(#e66465, #9198e5);
+  --cell-bg: rgb(1, 1, 97);
+  --letter-bg: #8a8a8a;
+
+  --text: #111;
+  --text-inverse: #fff;
+  --border: #000;
+
+  color-scheme: light dark;
+}
+
+/* Auto-adapt to OS dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-body: #0f1115;
+    --text: #e8e8e8;
+    --letter-bg: #222;
+    --border: #333;
+  }
+}
+
+/* ===== Global ===== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-button {
-  padding: 32px;
-}
-
-h2, h1 {
-  text-align: center;
+html {
+  /* smoother scaling across devices */
+  font-size: 16px;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    background-color: gray;
+  margin: 0;
+  min-height: 100dvh; /* handles mobile UI chrome better */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--bg-body);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+               Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.4;
 }
 
+h1, h2 {
+  text-align: center;
+  margin: 0;
+}
+
+button {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+}
+
+/* Keyboard-friendly focus without the ugly outline on clicks */
+:focus-visible {
+  outline: 2px solid #66a3ff;
+  outline-offset: 2px;
+}
+
+/* ===== Layout ===== */
 #main-container {
-    background: linear-gradient(#e66465, #9198e5);
-    border-radius: 5px;
-    height: 100%;
-    width: 100%;
-    padding: 5px;
-    box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 0.3);
-
-
+  background: var(--bg-card);
+  border: 2px solid rgba(255, 100, 0, .6);
+  border-radius: var(--radius-sm);
+  max-inline-size: clamp(20rem, 90vw, 38rem);
+  padding: var(--space-3);
+  box-shadow: 0 .2rem .4rem .2rem rgba(255, 100, 0, .6);
 }
 
-@keyframes shadow {
-    animation-name: shadow;
-    animation-duration: 3s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-    animation-direction: alternate-reverse;
-  from { box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 0.3);}
-  to { box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);}
+/* ===== Rows / Grid ===== */
+.word-row,
+.row {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
 }
 
-.word-row {
-    padding: 5px;
-    display: flex;
-    justify-content: space-around;
-}
+/* Optionally tighten row-specific spacing */
+#row-0 .letter { margin: 0; }
+#row-2 { margin-block-end: var(--space-2); }
 
+/* ===== Cells ===== */
 .cell {
-    border-radius: 3px;
-    margin-left: 2px;
-    margin-right: 2px;
-    background-color: rgb(1, 1, 97);
-    width: 50px;
-    height: 50px
+  inline-size: var(--cell-w);
+  block-size: var(--cell-h);
+  background: var(--cell-bg);
+  border-radius: var(--radius-sm);
+  position: relative;
+  box-shadow: var(--shadow-1), var(--shadow-2);
+  /* Improve paint quality on moving/animating shadows */
+  will-change: box-shadow, transform;
 }
 
-@keyframes selected {
-  from {box-shadow: 0px 0px 0px 2px rgba(255,255,255,1);}
-  to {box-shadow: 0px 0px 0px 2px rgba(255,255,255,0.3);}
+/* Optional halo behind the cell without affecting layout */
+.cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: var(--shadow-3);
+  z-index: -1;
+}
+
+/* ===== Letters / Keys ===== */
+.letter, .special-key {
+  display: inline-flex;
+  place-content: center;
+  place-items: center;
+  cursor: pointer;
+  inline-size: 2.6rem;
+  block-size: 2.9rem;
+  background: var(--letter-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: var(--space-1);
+  user-select: none;
+  transition: transform 120ms ease, box-shadow 200ms ease;
+}
+
+.special-key {
+      inline-size: 6rem;
+      block-size: 2.9rem;
+}
+
+#enter {
+    letter-spacing: .1rem;
+}
+
+.letter:active, .special-key:active {
+  transform: translateY(1px) scale(.99);
+}
+
+
+/* ===== Animations ===== */
+/* Use a tokenized shadow so we can animate the intensity cleanly */
+@keyframes pulse-ring {
+  from { box-shadow: 0 0 0 2px rgba(255,255,255,1); }
+  to   { box-shadow: 0 0 0 2px rgba(255,255,255,.3); }
 }
 
 .selected {
-    box-shadow: 0px 0px 0px 2px rgba(255,255,255,1);
-    animation-name: selected;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
+  animation: pulse-ring 2s ease-in-out infinite;
 }
 
-.row {
-margin-top: 3px;
-    display:flex;
-    justify-content: space-around;
+/* Respect users who dislike motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-#row-2 {
-    margin-bottom: 5px;
+/* Higher contrast users get stronger shadows */
+@media (prefers-contrast: more) {
+  :root {
+    --shadow-1: 0 0 .2rem rgba(255, 140, 0, .8);
+    --shadow-2: 0 0 .8rem rgba(0,0,0,.6);
+  }
 }
-
-.letter {
-    cursor: pointer;
-    text-align:center;
-    width :25px;
-    height 28px;
-    background-color: gray;
-    border: 1px solid black;
-    border-radius: 2px;
-    padding: 3px;
-}
-

@@ -6,13 +6,6 @@
     [hurdle.board :as b]
     [hurdle.keyboard :as k]))
 
-(def starting-state {:word      nil
-                     :correct   []
-                     :almost    []
-                     :not-found []})
-
-(defonce state (r/atom starting-state))
-
 (defn app []
   [:div {:id "main-container"}
    [b/board]

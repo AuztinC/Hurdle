@@ -4,18 +4,23 @@
                                         it
                                         describe
                                         before
-                                        with-stubs]]
+                                        with-stubs
+                                        context]]
                    [c3kit.wire.spec-helperc :refer [should-select]])
-  (:require [speclj.core]
+  (:require [hurdle.config :as config]
+            [speclj.core]
             [c3kit.wire.spec-helper :as wire]
-            [hurdle.main :as sut]))
+            [hurdle.main :as main]))
 
 (describe "keyboard"
   (with-stubs)
   (wire/with-root-dom)
-  (before (wire/render [sut/app]))
+  (before
+    (reset! config/state {:word "WORDS"})
+    (wire/render [main/app]))
 
-  (it "draws a letter"
+  (context "layout"
+   (it "draws a letter"
     (should-select ".letter"))
 
   (it "draws keyboard"
@@ -24,7 +29,22 @@
   (it "draws 26 letters"
     (should= 26 (count (wire/select-all ".letter"))))
 
-  #_(it "special keys"
-    (should-select "#enter")))
+  (it "special keys"
+    (should-select "#enter")
+    (should-select "#backspace")))
+
+  (context "input"
+    (it "letter key updates ratom"
+      (wire/click "#Q")
+      (should= "Q" (:input @config/state)))
+
+    (it "backspace removes a letter from input"
+      (swap! config/state assoc :input "WW")
+      (should= "WW" (:input @config/state))
+      (wire/click "#backspace")
+      (should= "W" (:input @config/state)))
+
+    (it "input must be 5 letters"))
+  )
 
 
